@@ -61,9 +61,9 @@ export default function Form() {
     if(licenceId.match(/^[A-F0-9]*$/) ? false : true) errors.push("Solo debe contener números y letras [A-F]")
 
     return (
-        <motion.div initial={{ opacity: 0, scale: 0, transform: "translateY(200px)"  }} animate={{ opacity: 1, scale: 1, transform: "translateY(0px)"  }} transition={{ type: "spring" }} className = " bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-50 rounded-xl w-8/10 md:w-5/10 h-7/10 shadow-xl/30 flex flex-col gap-10 items-center justify-center p-[5%]">
-            <h1 className="text-center font-bold text-2xl">Ingresa el número de la licencia para consultarla</h1>
-            <form className="w-full max-w-xs flex items-center justify-center flex-col gap-10" onSubmit={onSubmit}>
+        <motion.div initial={{ opacity: 0, scale: 0, transform: "translateY(200px)"  }} animate={{ opacity: 1, scale: 1, transform: "translateY(0px)"  }} transition={{ type: "spring" }} className = " bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-50 rounded-xl w-8/10 h-9/10 md:w-5/10 md:h-7/10 shadow-xl/30 flex flex-col gap-1 md:gap-10 items-center justify-center p-[5%]">
+            <h1 className="text-center font-bold text-medium md:text-2xl">Ingresa el número de la licencia para consultarla</h1>
+            <form className="w-full max-w-xs flex items-center justify-center flex-col gap-1 md:gap-5" onSubmit={onSubmit}>
             <Input
                 label="Licencia"
                 labelPlacement="outside"
@@ -103,6 +103,7 @@ export default function Form() {
                 onChange={() => setCaptchacompleted(true)}
                 onExpired={() => setCaptchacompleted(false)}
                 ref={recaptchaRef}
+                size="compact"
             />
             {!captchaCompleted && (
             <p className="text-red-600 text-sm font-semibold">
