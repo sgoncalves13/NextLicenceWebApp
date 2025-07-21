@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef  } from "react";
 import {Button, Input } from "@heroui/react";
 import { motion } from "motion/react"
 import ModalComp from "./ModalComp";
@@ -11,7 +11,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 export default function Form() {
     const [licenceId, setLicenceId] = React.useState <string>("");
 
-    const recaptchaRef = React.createRef<ReCAPTCHA>();
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
 
     const [licenceInfo, setLicenceInfo] = useState(null);
 
@@ -44,16 +44,17 @@ export default function Form() {
         finally {
             setShowModalDetail(true);
             SetLoading(false);
+            console.log("recaptchaRef.current:", recaptchaRef.current);
+            if (recaptchaRef.current) {
+                recaptchaRef.current.reset();
+                setCaptchacompleted(false);
+            }
         }
     }
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         GetLicenceInfo(endpoint);
         SetLoading(true);
-        if (recaptchaRef.current) {
-            recaptchaRef.current.reset();
-            setCaptchacompleted(false);
-        }
   };
 
     if(licenceId.length !== 12) errors.push("La longitud de la licencia debe ser de 12");
