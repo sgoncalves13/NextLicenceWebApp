@@ -9,8 +9,8 @@ import Header from "@/components/header";
 
 export const metadata: Metadata = {
   title: {
-    default: "Consulta tu licencia",
-    template: `%s - Consulta tu licencia`,
+    default: "Consulta tu licencia Profit",
+    template: `%s - Consulta tu licencia Profit`,
   },
   description: siteConfig.description,
   icons: {
