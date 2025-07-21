@@ -44,7 +44,6 @@ export default function Form() {
         finally {
             setShowModalDetail(true);
             SetLoading(false);
-            console.log("recaptchaRef.current:", recaptchaRef.current);
             if (recaptchaRef.current) {
                 recaptchaRef.current.reset();
                 setCaptchacompleted(false);
