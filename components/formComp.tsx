@@ -25,9 +25,9 @@ export default function Form() {
 
     const endpoint = `/api/getLicences?Id=${licenceId}`;
 
-    const GetLicenceInfo = async (endpoint: string) => {
+    const GetLicenceInfo = async (endpoint: string, captchaToken: string) => {
         try {
-            const response = await fetch(endpoint, {
+            const response = await fetch(`${endpoint}&captchaToken=${captchaToken}`, {
                 method: "GET",
                 headers: {
                 "Content-Type": "application/json",
@@ -51,9 +51,14 @@ export default function Form() {
         }
     }
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        const token = recaptchaRef.current?.getValue(); 
         e.preventDefault();
-        GetLicenceInfo(endpoint);
-        SetLoading(true);
+        if (token) {
+            GetLicenceInfo(endpoint, token);
+            SetLoading(true);
+        } else {
+            alert("Por favor completa el CAPTCHA antes de enviar el formulario.");
+        }
   };
 
     if(licenceId.length !== 12) errors.push("La longitud de la licencia debe ser de 12");
