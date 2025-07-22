@@ -1,3 +1,4 @@
+import { ApiResponse } from '@nestjs/swagger';
 import { type NextRequest, NextResponse } from 'next/server';
 
 const PRIVATE_API_URL = 'https://w0v29jxde1.execute-api.us-east-1.amazonaws.com/v1/';
@@ -51,9 +52,9 @@ export async function GET(request: NextRequest) {
     });
 
     if (!apiResponse.ok) {
-      const errorBody = await apiResponse.text();
+      const errorBody = await apiResponse.json();
       return NextResponse.json(
-        { error: errorBody },
+        { error: errorBody.error },
         { status: apiResponse.status }
       );
     }
