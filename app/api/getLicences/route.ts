@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     if (!apiResponse.ok) {
       const errorBody = await apiResponse.text();
       return NextResponse.json(
-        { error: `Error en el servicio de licencias: ${apiResponse.statusText}` },
+        { error: errorBody },
         { status: apiResponse.status }
       );
     }
