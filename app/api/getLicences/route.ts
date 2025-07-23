@@ -11,9 +11,6 @@ export async function GET(request: NextRequest) {
     const licenceId = searchParams.get('Id');
     const captchaToken = searchParams.get('captchaToken');
 
-    const userIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip');
-    const clientIp = userIp ? userIp.split(',')[0].trim() : null;
-
     if (!captchaToken) {
       return NextResponse.json(
         { error: 'Verificación de CAPTCHA fallida. Token no proporcionado.' },
@@ -26,7 +23,7 @@ export async function GET(request: NextRequest) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `secret=${RECAPTCHA_SECRET_KEY}&response=${captchaToken}&remoteip=${clientIp}`,
+      body: `secret=${RECAPTCHA_SECRET_KEY}&response=${captchaToken}`,
     });
 
     const recaptchaData = await recaptchaResponse.json();
@@ -49,10 +46,7 @@ export async function GET(request: NextRequest) {
 
     const apiResponse = await fetch(fullApiUrl, {
       method: 'GET',
-      headers: {
-        ...(clientIp && { 'X-Real-IP': clientIp }),
-        ...(clientIp && { 'X-Forwarded-For': clientIp }),
-      },
+      headers: {},
       cache: 'no-store', 
     });
 
