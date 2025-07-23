@@ -76,6 +76,7 @@ export default function Form() {
                 type="text"
                 isClearable
                 maxLength={12}
+                minLength={12}
                 isInvalid = {errors.length > 0 || !captchaCompleted}
                 isDisabled = {loading}
                 onChange={(e) => setLicenceId(e.target.value.toUpperCase())}
