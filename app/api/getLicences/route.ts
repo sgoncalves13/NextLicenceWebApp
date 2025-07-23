@@ -1,4 +1,3 @@
-import { ApiResponse } from '@nestjs/swagger';
 import { type NextRequest, NextResponse } from 'next/server';
 
 const PRIVATE_API_URL = 'https://w0v29jxde1.execute-api.us-east-1.amazonaws.com/v1/';
