@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { headers } from 'next/headers';
 
 const PRIVATE_API_URL = 'https://w0v29jxde1.execute-api.us-east-1.amazonaws.com/v1/';
 
@@ -7,6 +8,13 @@ const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
 export async function GET(request: NextRequest) {
   try {
 
+    const headersList = headers();
+    const forwardedFor = (await headersList).get('x-forwarded-for');
+    let clientIp = 'UNKNOWN';
+
+    if (forwardedFor) {
+      clientIp = forwardedFor.split(',')[0].trim();
+    } 
     const searchParams = request.nextUrl.searchParams;
     const licenceId = searchParams.get('Id');
     const captchaToken = searchParams.get('captchaToken');
@@ -46,7 +54,9 @@ export async function GET(request: NextRequest) {
 
     const apiResponse = await fetch(fullApiUrl, {
       method: 'GET',
-      headers: {},
+      headers: {
+        'X-Client-IP': clientIp,
+      },
       cache: 'no-store', 
     });
 
