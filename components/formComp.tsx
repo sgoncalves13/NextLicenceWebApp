@@ -47,9 +47,10 @@ function DynamicInput({ isNew, licenceId, setLicenceId, errors, loading, captcha
                         "backdrop-blur-xl",
                         "backdrop-saturate-200",
                         "hover:bg-default-200/70",
-                        "group-data-[focus=true]:bg-default-200/50",
-                        "dark:group-data-[focus=true]:bg-default/60",
                         "cursor-text!",
+                    ],
+                    input: [
+                        "focus:outline-none",
                     ]
                 }}
                 className="font-rethink"
