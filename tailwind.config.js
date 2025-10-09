@@ -12,6 +12,10 @@ const config = {
       fontFamily: {
         sans: ["var(--font-sans)"],
         mono: ["var(--font-mono)"],
+        rethink: ["var(--font-rethink)"],
+      },
+      backgroundImage: {
+        'custom-radial': 'radial-gradient(circle at 80% 40%, #A9D2F3 0%, #4A6D8C 50%, #16354D 100%)',
       },
     },
   },
