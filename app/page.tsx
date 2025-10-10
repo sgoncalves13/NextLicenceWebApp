@@ -6,6 +6,7 @@ import { useState } from "react";
 export default function Licence() {
 
     const [isNewLicence, setIsNewLicence] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     return (
     <div className="w-full h-full flex flex-col justify-center items-center">
@@ -25,6 +26,7 @@ export default function Licence() {
                     isNewLicence ? 'text-black' : 'text-gray-500'
                 }`}
                 onClick={() => setIsNewLicence(true)}
+                disabled={loading}
                 >
                 Nueva
                 </button>
@@ -33,11 +35,12 @@ export default function Licence() {
                     !isNewLicence ? 'text-black' : 'text-gray-500'
                 }`}
                 onClick={() => setIsNewLicence(false)}
+                disabled={loading}
                 >
                 Vieja
                 </button>
             </div>
-            <FormComp isNew={isNewLicence}/>
+            <FormComp isNew={isNewLicence} loading={loading} setLoading={setLoading} />
     </div>
     );
 }

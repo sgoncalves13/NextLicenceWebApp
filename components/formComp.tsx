@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Input } from "@heroui/react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useAnimation } from "motion/react";
 import ModalComp from "./ModalComp";
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -70,14 +70,15 @@ function DynamicInput({ isNew, licenceId, setLicenceId, errors, loading, captcha
 
 type FormProps = {
     isNew: boolean;
+    loading: boolean;
+    setLoading: (val: boolean) => void;
 };
 
-export default function Form({ isNew }: FormProps) {
+export default function Form({ isNew, loading, setLoading }: FormProps) {
     const [licenceId, setLicenceId] = useState<string>("");
     const [licenceInfo, setLicenceInfo] = useState<any>(null);
     const [showModalDetail, setShowModalDetail] = useState(false);
     const [captchaCompleted, setCaptchacompleted] = useState(false);
-    const [loading, setLoading] = useState(false);
     const recaptchaRef = useRef<ReCAPTCHA>(null);
 
     const errors: string[] = [];
@@ -111,6 +112,18 @@ export default function Form({ isNew }: FormProps) {
             alert("Por favor completa el CAPTCHA antes de enviar el formulario.");
         }
     };
+
+    const controls = useAnimation();
+
+    useEffect(() => {
+        controls.start({
+            opacity: [0, 1],
+            y: [40, 0],
+            transition: { duration: 0.4, ease: "easeOut" },
+        });
+        setCaptchacompleted(false);
+    }, [isNew]);
+
 
     return (
         <div className="w-8/10 h-8/10 md:w-7/12 md:h-7/10">
