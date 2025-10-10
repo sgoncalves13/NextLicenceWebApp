@@ -1,11 +1,7 @@
 import { motion } from "motion/react"
 
 interface LicenceInfoType {
-    DescCliente?: string;
-    DescEstado?: string;
-    DescProducto?: string;
-    Id?: string;
-    Status?: any;
+    [key: string]: any;
     error?: string;
 }
 
@@ -15,14 +11,16 @@ interface ModalCompProps {
 }
 
 export default function ModalComp({ licence_info, onClose }: ModalCompProps) {
-    if (!licence_info) {
-        return null; 
-    }
+    if (!licence_info) return null;
+
+    const { error, ...fields } = licence_info;
+
+    const fieldCount = Object.keys(fields).length;
 
     return (
-        <motion.div initial={{ scale: 0, transform: "translateX(-200px)"  }} animate={{ scale: 1, transform: "translateX(0px)"  }} transition={{ type: "spring" }} className="fixed inset-0 flex justify-center items-center z-50 p-4" onClick={onClose}>
+        <motion.div initial={{ scale: 0, transform: "translateX(-200px)" }} animate={{ scale: 1, transform: "translateX(0px)" }} transition={{ type: "spring" }} className="fixed inset-0 flex justify-center items-center z-50 p-4" onClick={onClose}>
             <div
-                className="bg-gray-900/40 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border-1 border-black-100 p-8 shadow-2xl max-w-lg w-full relative"
+                className="bg-gray-900/70 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-md p-8 shadow-xl max-w-lg w-full relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 {licence_info.error ? (
@@ -31,11 +29,23 @@ export default function ModalComp({ licence_info, onClose }: ModalCompProps) {
                         <p className="mt-2 text-xl">{licence_info.error}</p>
                     </div>
                 ) : (
+
                     <>
-                        <h1 className="text-2xl font-bold mb-4 text-white">Licencia: {licence_info.Id}</h1>
-                        <p className="mb-2 text-white"><strong>Cliente:</strong> {licence_info.DescCliente}</p>
-                        <p className="mb-2 text-white"><strong>Producto:</strong> {licence_info.DescProducto}</p>
-                        <p className="mb-4 text-white"><strong>Estado:</strong> {licence_info.DescEstado}</p>
+                        {fieldCount > 4 ? (
+                            <>
+                                <h1 className="text-2xl font-bold mb-4 text-white">Licencia: {licence_info.Id}</h1>
+                                <p className="mb-2 text-white"><strong>Cliente:</strong> {licence_info.DescCliente}</p>
+                                <p className="mb-2 text-white"><strong>Producto:</strong> {licence_info.DescProducto}</p>
+                                <p className="mb-4 text-white"><strong>Estado:</strong> {licence_info.DescEstado}</p>
+                            </>
+                        ) : (
+                            <>
+                                <h1 className="text-2xl font-bold mb-4 text-white">Licencia: {licence_info.Id}</h1>
+                                <p className="mb-2 text-white"><strong>Cliente:</strong> {licence_info.DescCliente}</p>
+                                <p className="mb-2 text-white"><strong>Articulo:</strong> {licence_info.DescArticulo}</p>
+                                <p className="mb-4 text-white"><strong>Última fecha:</strong> {licence_info.UFecha}</p>
+                            </>
+                        )}
                     </>
                 )}
 

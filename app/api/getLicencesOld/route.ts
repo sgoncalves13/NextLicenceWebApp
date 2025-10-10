@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 
-const PRIVATE_API_URL = 'https://erei74m8ye.execute-api.us-east-1.amazonaws.com/v1/';
+const PRIVATE_API_URL = process.env.PRIVATE_API_URL;
 
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
 

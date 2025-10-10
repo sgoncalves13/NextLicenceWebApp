@@ -11,7 +11,6 @@ type DynamicInputProps = {
     setLicenceId: (val: string) => void;
     errors: string[];
     loading: boolean;
-    captchaCompleted: boolean;
 };
 
 function BaseInput({
@@ -19,19 +18,22 @@ function BaseInput({
     isCenter,
     length,
     onChange,
+    isLoadingOld
 }: {
     className?: string;
     isCenter?: boolean;
     length?: number;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    isLoadingOld?: boolean;
 }) {
     return (
         <Input
             variant="faded"
-            size="lg"
+            size="md"
             maxLength={length}
             type="text"
             onChange={onChange}
+            isDisabled={isLoadingOld}
             classNames={{
                 inputWrapper: [
                     "shadow-sm",
@@ -54,9 +56,10 @@ function BaseInput({
 
 type InputOldProps = {
     setLicenceIdOld: (val: string) => void;
+    isLoadingOld?: boolean;
 };
 
-function InputOld({ setLicenceIdOld }: InputOldProps) {
+function InputOld({ setLicenceIdOld, isLoadingOld }: InputOldProps) {
     const [parts, setParts] = useState(Array(5).fill(""));
 
     const handlePartChange = (index: number, value: string) => {
@@ -72,37 +75,42 @@ function InputOld({ setLicenceIdOld }: InputOldProps) {
     };
 
     return (
-        <div className="flex flex-col gap-2 w-full items-center">
+        <div className="w-full items-center">
             <div className="flex gap-3 items-center justify-center w-full">
                 <BaseInput
-                    className="w-[100%]"
+                    className="w-[65%]"
                     length={7}
+                    isLoadingOld={isLoadingOld}
                     onChange={(e) => handlePartChange(0, e.target.value)}
                 />
                 -
                 <BaseInput
-                    className="w-[80%]"
+                    className="w-[50%]"
                     length={4}
+                    isLoadingOld={isLoadingOld}
                     onChange={(e) => handlePartChange(1, e.target.value)}
                 />
                 -
                 <BaseInput
-                    className="w-[40%]"
+                    className="w-[30%]"
                     length={1}
                     isCenter
+                    isLoadingOld={isLoadingOld}
                     onChange={(e) => handlePartChange(2, e.target.value)}
                 />
                 -
                 <BaseInput
-                    className="w-[80%]"
+                    className="w-[50%]"
                     length={4}
+                    isLoadingOld={isLoadingOld}
                     onChange={(e) => handlePartChange(3, e.target.value)}
                 />
                 -
                 <BaseInput
-                    className="w-[50%]"
+                    className="w-[40%]"
                     length={2}
                     isCenter
+                    isLoadingOld={isLoadingOld}
                     onChange={(e) => handlePartChange(4, e.target.value)}
                 />
             </div>
@@ -112,23 +120,23 @@ function InputOld({ setLicenceIdOld }: InputOldProps) {
 
 
 
-function InputNew({ licenceId, setLicenceId, errors, loading, captchaCompleted }: DynamicInputProps) {
+function InputNew({ licenceId, setLicenceId, errors, loading }: DynamicInputProps) {
 
     return (
         <Input
             label="Licencia familia 9"
-            labelPlacement="outside"
+            labelPlacement="outside-top"
             variant="faded"
             name="licencia"
             type="text"
             isClearable
             maxLength={12}
             minLength={12}
-            isInvalid={errors.length > 0 || !captchaCompleted}
+            isInvalid={errors.length > 0}
             isDisabled={loading}
             onChange={(e) => setLicenceId(e.target.value.toUpperCase())}
             onClear={() => setLicenceId("")}
-            size="lg"
+            size="md"
             value={licenceId}
             errorMessage={() => (
                 <ul>
@@ -161,17 +169,17 @@ type LicenceButtonProps = {
     captchaCompleted: boolean;
     onSubmit: () => void;
     text: string;
+    otherLoading?: boolean
 };
 
-function LicenceButton({ loading, errors, captchaCompleted, onSubmit, text }: LicenceButtonProps) {
+function LicenceButton({ loading, errors, captchaCompleted, onSubmit, text, otherLoading }: LicenceButtonProps) {
     return (
         <Button
             color="primary"
-            type="submit"
             variant="shadow"
             isLoading={loading}
             size="lg"
-            isDisabled={errors.length > 0 || !captchaCompleted}
+            isDisabled={errors.length > 0 || !captchaCompleted || otherLoading}
             onPress={onSubmit}
         >
             {text}
@@ -192,13 +200,12 @@ export default function Form() {
     const recaptchaRef = useRef<ReCAPTCHA>(null);
 
     const errors: string[] = [];
-    if (licenceId.length !== 12) errors.push("La longitud de la licencia debe ser de 12");
+    if (licenceId.length !== 12) errors.push("La longitud de la licencia debe ser de 12 caracteres");
     if (!/^[A-F0-9]*$/.test(licenceId)) errors.push("Solo debe contener números y letras [A-F]");
 
     const oldErrors: string[] = [];
     const patternOld = /^(AAN|ACA|ACE|AED|AEX|ALL|AOC|AOR|CAN|CCA|CCB|CCE|CEX|CFL|CLL|COC|COR|CRD|IAN|ICA|ICE|IEX|ILL|IOC|IOR|RCA)[0-9]{4}-[A-Z0-9]{4}-[1345]-(AD70|AD75|AD80|AD88|CO30|CO32|CO33|CO37|NO20|NO21|NO22|NO27|PV20|PV23)-(1|3|5|10|20|OP)$/;
 
-    if (licenceIdOld.length !== 22 && licenceIdOld.length !== 21) oldErrors.push("La longitud de la licencia debe ser de 21 o 22");
     if (!patternOld.test(licenceIdOld)) oldErrors.push("No cumple con el formato valido");
 
     const endpoint = `/api/getLicences?Id=${licenceId}`;
@@ -239,16 +246,15 @@ export default function Form() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -40 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="bg-white/45 rounded-4xl shadow-xl/30 backdrop-filter backdrop-blur-md w-full h-full flex flex-col gap-1 md:gap-10 items-center justify-center p-[5%]"
+                className="bg-white/45 rounded-4xl shadow-xl/30 backdrop-filter backdrop-blur-md bg-opacity-10 w-full h-full flex flex-col gap-1 md:gap-10 items-center justify-center p-[5%]"
             >
-                <div className="w-full max-w-[80%] flex items-center justify-center flex-col gap-5">
-                    <div className="w-full flex gap-3 justify-center items-center">
+                <div className="w-full max-w-[100%] md:max-w-[85%] flex items-center justify-center flex-col gap-5">
+                    <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
                         <InputNew
                             licenceId={licenceId}
                             setLicenceId={setLicenceId}
                             errors={errors}
                             loading={loading}
-                            captchaCompleted={captchaCompleted}
                         />
                         <LicenceButton
                             loading={loading}
@@ -256,14 +262,16 @@ export default function Form() {
                             captchaCompleted={captchaCompleted}
                             onSubmit={() =>onSubmit(endpoint, true)}
                             text="Consultar"
+                            otherLoading={loadingOld}
                         />
                     </div>
                     <div className="w-full text-left">
-                        <label>Licencia familia 2K8 y 2KDoce</label>
+                        <label className="text-small">Licencia familia 2K8 y 2KDoce</label>
                     </div>
-                    <div className="w-full flex gap-3 justify-center items-center">
+                    <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
                         <InputOld
                             setLicenceIdOld={setLicenceIdOld}
+                            isLoadingOld={loadingOld}
                         />
                         <LicenceButton
                             loading={loadingOld}
@@ -271,6 +279,7 @@ export default function Form() {
                             captchaCompleted={captchaCompleted}
                             onSubmit={() =>onSubmit(endpointOld, false)}
                             text="Consultar"
+                            otherLoading={loading}
                         />
                     </div>
 
