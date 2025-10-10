@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Button, Input } from "@heroui/react";
-import { AnimatePresence, motion, useAnimation } from "motion/react";
+import { motion } from "motion/react";
 import ModalComp from "./ModalComp";
 import ReCAPTCHA from "react-google-recaptcha";
 
 type DynamicInputProps = {
-    isNew: boolean;
     licenceId: string;
     setLicenceId: (val: string) => void;
     errors: string[];
@@ -15,79 +14,197 @@ type DynamicInputProps = {
     captchaCompleted: boolean;
 };
 
-function DynamicInput({ isNew, licenceId, setLicenceId, errors, loading, captchaCompleted }: DynamicInputProps) {
-    if (isNew) {
-        return (
-            <Input
-                label="Número de licencia"
-                labelPlacement="outside"
-                variant="faded"
-                name="licencia"
-                type="text"
-                isClearable
-                maxLength={12}
-                minLength={12}
-                isInvalid={errors.length > 0 || !captchaCompleted}
-                isDisabled={loading}
-                onChange={(e) => setLicenceId(e.target.value.toUpperCase())}
-                onClear={() => setLicenceId("")}
-                size="lg"
-                value={licenceId}
-                errorMessage={() => (
-                    <ul>
-                        {errors.map((error, i) => (
-                            <li key={i}>{error}</li>
-                        ))}
-                    </ul>
-                )}
-                classNames={{
-                    inputWrapper: [
-                        "shadow-sm",
-                        "bg-default-200/100",
-                        "backdrop-blur-xl",
-                        "backdrop-saturate-200",
-                        "hover:bg-default-200/70",
-                        "cursor-text!",
-                    ],
-                    input: [
-                        "focus:outline-none",
-                    ]
-                }}
-                className="font-rethink"
-            />
-        );
-    }
+function BaseInput({
+    className,
+    isCenter,
+    length,
+    onChange,
+}: {
+    className?: string;
+    isCenter?: boolean;
+    length?: number;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+    return (
+        <Input
+            variant="faded"
+            size="lg"
+            maxLength={length}
+            type="text"
+            onChange={onChange}
+            classNames={{
+                inputWrapper: [
+                    "shadow-sm",
+                    "bg-default-200/100",
+                    "backdrop-blur-xl",
+                    "backdrop-saturate-200",
+                    "hover:bg-default-200/70",
+                    "cursor-text!",
+                ],
+                input: ["focus:outline-none", isCenter ? "text-center" : "text-left", "uppercase",],
+            }}
+            className={className}
+        />
+    );
+}
+
+
+
+
+
+type InputOldProps = {
+    setLicenceIdOld: (val: string) => void;
+};
+
+function InputOld({ setLicenceIdOld }: InputOldProps) {
+    const [parts, setParts] = useState(Array(5).fill(""));
+
+    const handlePartChange = (index: number, value: string) => {
+        const newParts = [...parts];
+        const upperVal = value.toUpperCase();
+        newParts[index] = upperVal;
+
+
+        setParts(newParts);
+
+        const concatenated = newParts.join("-");
+        setLicenceIdOld(concatenated);
+    };
 
     return (
-        <div className="flex gap-[2%] text-center justify-center items-center">
-            <Input></Input> -
-            <Input></Input> -
-            <Input></Input> -
-            <Input></Input>
+        <div className="flex flex-col gap-2 w-full items-center">
+            <div className="flex gap-3 items-center justify-center w-full">
+                <BaseInput
+                    className="w-[100%]"
+                    length={7}
+                    onChange={(e) => handlePartChange(0, e.target.value)}
+                />
+                -
+                <BaseInput
+                    className="w-[80%]"
+                    length={4}
+                    onChange={(e) => handlePartChange(1, e.target.value)}
+                />
+                -
+                <BaseInput
+                    className="w-[40%]"
+                    length={1}
+                    isCenter
+                    onChange={(e) => handlePartChange(2, e.target.value)}
+                />
+                -
+                <BaseInput
+                    className="w-[80%]"
+                    length={4}
+                    onChange={(e) => handlePartChange(3, e.target.value)}
+                />
+                -
+                <BaseInput
+                    className="w-[50%]"
+                    length={2}
+                    isCenter
+                    onChange={(e) => handlePartChange(4, e.target.value)}
+                />
+            </div>
         </div>
     );
 }
 
-type FormProps = {
-    isNew: boolean;
+
+
+function InputNew({ licenceId, setLicenceId, errors, loading, captchaCompleted }: DynamicInputProps) {
+
+    return (
+        <Input
+            label="Licencia familia 9"
+            labelPlacement="outside"
+            variant="faded"
+            name="licencia"
+            type="text"
+            isClearable
+            maxLength={12}
+            minLength={12}
+            isInvalid={errors.length > 0 || !captchaCompleted}
+            isDisabled={loading}
+            onChange={(e) => setLicenceId(e.target.value.toUpperCase())}
+            onClear={() => setLicenceId("")}
+            size="lg"
+            value={licenceId}
+            errorMessage={() => (
+                <ul>
+                    {errors.map((error, i) => (
+                        <li key={i}>{error}</li>
+                    ))}
+                </ul>
+            )}
+            classNames={{
+                inputWrapper: [
+                    "shadow-sm",
+                    "bg-default-200/100",
+                    "backdrop-blur-xl",
+                    "backdrop-saturate-200",
+                    "hover:bg-default-200/70",
+                    "cursor-text!",
+                ],
+                input: [
+                    "focus:outline-none",
+                ]
+            }}
+            className="font-rethink"
+        />
+    );
+}
+
+type LicenceButtonProps = {
     loading: boolean;
-    setLoading: (val: boolean) => void;
+    errors: string[];
+    captchaCompleted: boolean;
+    onSubmit: () => void;
+    text: string;
 };
 
-export default function Form({ isNew, loading, setLoading }: FormProps) {
+function LicenceButton({ loading, errors, captchaCompleted, onSubmit, text }: LicenceButtonProps) {
+    return (
+        <Button
+            color="primary"
+            type="submit"
+            variant="shadow"
+            isLoading={loading}
+            size="lg"
+            isDisabled={errors.length > 0 || !captchaCompleted}
+            onPress={onSubmit}
+        >
+            {text}
+        </Button>
+    );
+}
+
+
+
+export default function Form() {
     const [licenceId, setLicenceId] = useState<string>("");
+    const [licenceIdOld, setLicenceIdOld] = useState<string>("");
     const [licenceInfo, setLicenceInfo] = useState<any>(null);
     const [showModalDetail, setShowModalDetail] = useState(false);
     const [captchaCompleted, setCaptchacompleted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [loadingOld, setLoadingOld] = useState(false);
     const recaptchaRef = useRef<ReCAPTCHA>(null);
 
     const errors: string[] = [];
     if (licenceId.length !== 12) errors.push("La longitud de la licencia debe ser de 12");
     if (!/^[A-F0-9]*$/.test(licenceId)) errors.push("Solo debe contener números y letras [A-F]");
 
-    const endpoint = `/api/getLicences?Id=${licenceId}`;
+    const oldErrors: string[] = [];
+    const patternOld = /^(AAN|ACA|ACE|AED|AEX|ALL|AOC|AOR|CAN|CCA|CCB|CCE|CEX|CFL|CLL|COC|COR|CRD|IAN|ICA|ICE|IEX|ILL|IOC|IOR|RCA)[0-9]{4}-[A-Z0-9]{4}-[1345]-(AD70|AD75|AD80|AD88|CO30|CO32|CO33|CO37|NO20|NO21|NO22|NO27|PV20|PV23)-(1|3|5|10|20|OP)$/;
 
-    const GetLicenceInfo = async (endpoint: string, captchaToken: string) => {
+    if (licenceIdOld.length !== 22 && licenceIdOld.length !== 21) oldErrors.push("La longitud de la licencia debe ser de 21 o 22");
+    if (!patternOld.test(licenceIdOld)) oldErrors.push("No cumple con el formato valido");
+
+    const endpoint = `/api/getLicences?Id=${licenceId}`;
+    const endpointOld = `/api/getLicencesOld?Id=${licenceIdOld}`;
+
+    const GetLicenceInfo = async (endpoint: string, captchaToken: string, isNew: boolean) => {
         try {
             const response = await fetch(`${endpoint}&captchaToken=${captchaToken}`);
             const licence_info = await response.json();
@@ -96,78 +213,84 @@ export default function Form({ isNew, loading, setLoading }: FormProps) {
             setLicenceInfo({ error: error.message });
         } finally {
             setShowModalDetail(true);
-            setLoading(false);
+            isNew ? setLoading(false) : setLoadingOld(false);
             recaptchaRef.current?.reset();
             setCaptchacompleted(false);
         }
     };
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+
+    const onSubmit = (endpoint: string, isNew: boolean) => {
         const token = recaptchaRef.current?.getValue();
         if (token) {
-            GetLicenceInfo(endpoint, token);
-            setLoading(true);
+            GetLicenceInfo(endpoint, token, isNew);
+            isNew ? setLoading(true) : setLoadingOld(true);
         } else {
             alert("Por favor completa el CAPTCHA antes de enviar el formulario.");
         }
     };
 
-    const controls = useAnimation();
-
-    useEffect(() => {
-        controls.start({
-            opacity: [0, 1],
-            y: [40, 0],
-            transition: { duration: 0.4, ease: "easeOut" },
-        });
-        setCaptchacompleted(false);
-    }, [isNew]);
 
 
     return (
         <div className="w-8/10 h-8/10 md:w-7/12 md:h-7/10">
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={isNew ? "new" : "old"}
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -40 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="bg-white/45 rounded-4xl shadow-xl/30 backdrop-filter backdrop-blur-md w-full h-full flex flex-col gap-1 md:gap-10 items-center justify-center p-[5%]"
-                >
-                    <form className="w-full max-w-100 flex items-center justify-center flex-col gap-5" onSubmit={onSubmit}>
-                        <DynamicInput isNew={isNew} licenceId={licenceId} setLicenceId={setLicenceId} errors={errors} loading={loading} captchaCompleted={captchaCompleted} />
-
-                        <ReCAPTCHA
-                            sitekey="6LfTG2grAAAAAPdyw1vlBJGfZSyv_j_mMTKfogHc"
-                            onChange={() => setCaptchacompleted(true)}
-                            onExpired={() => setCaptchacompleted(false)}
-                            ref={recaptchaRef}
-                            size="compact"
+            <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -40 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="bg-white/45 rounded-4xl shadow-xl/30 backdrop-filter backdrop-blur-md w-full h-full flex flex-col gap-1 md:gap-10 items-center justify-center p-[5%]"
+            >
+                <div className="w-full max-w-[80%] flex items-center justify-center flex-col gap-5">
+                    <div className="w-full flex gap-3 justify-center items-center">
+                        <InputNew
+                            licenceId={licenceId}
+                            setLicenceId={setLicenceId}
+                            errors={errors}
+                            loading={loading}
+                            captchaCompleted={captchaCompleted}
                         />
+                        <LicenceButton
+                            loading={loading}
+                            errors={errors}
+                            captchaCompleted={captchaCompleted}
+                            onSubmit={() =>onSubmit(endpoint, true)}
+                            text="Consultar"
+                        />
+                    </div>
+                    <div className="w-full text-left">
+                        <label>Licencia familia 2K8 y 2KDoce</label>
+                    </div>
+                    <div className="w-full flex gap-3 justify-center items-center">
+                        <InputOld
+                            setLicenceIdOld={setLicenceIdOld}
+                        />
+                        <LicenceButton
+                            loading={loadingOld}
+                            errors={oldErrors}
+                            captchaCompleted={captchaCompleted}
+                            onSubmit={() =>onSubmit(endpointOld, false)}
+                            text="Consultar"
+                        />
+                    </div>
 
-                        {!captchaCompleted && (
-                            <p className="text-red-600 text-sm font-semibold text-center">
-                                Debes completar el CAPTCHA antes de consultar.
-                            </p>
-                        )}
+                    <ReCAPTCHA
+                        sitekey="6LfTG2grAAAAAPdyw1vlBJGfZSyv_j_mMTKfogHc"
+                        onChange={() => setCaptchacompleted(true)}
+                        onExpired={() => setCaptchacompleted(false)}
+                        ref={recaptchaRef}
+                        size="compact"
+                    />
 
-                        <Button
-                            color="primary"
-                            type="submit"
-                            variant="shadow"
-                            isLoading={loading}
-                            size="lg"
-                            isDisabled={errors.length > 0 || !captchaCompleted}
-                        >
-                            Consultar
-                        </Button>
-                    </form>
+                    {!captchaCompleted && (
+                        <p className="text-red-600 text-sm font-semibold text-center">
+                            Debes completar el CAPTCHA antes de consultar.
+                        </p>
+                    )}
+                </div>
 
-                    {showModalDetail && <ModalComp licence_info={licenceInfo} onClose={() => setShowModalDetail(false)} />}
-                </motion.div>
-            </AnimatePresence>
+                {showModalDetail && <ModalComp licence_info={licenceInfo} onClose={() => setShowModalDetail(false)} />}
+            </motion.div>
         </div>
     );
 }
