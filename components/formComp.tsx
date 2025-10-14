@@ -200,7 +200,7 @@ export default function Form() {
             if (!/^[A-F0-9]*$/.test(id)) validationErrors.push("Solo debe contener números y letras [A-F].");
         } else {
             const patternOld = /^(AAN|ACA|ACE|AED|AEX|ALL|AOC|AOR|CAN|CCA|CCB|CCE|CEX|CFL|CLL|COC|COR|CRD|IAN|ICA|ICE|IEX|ILL|IOC|IOR|RCA)[0-9]{4}-[A-Z0-9]{4}-[1345]-(AD70|AD75|AD80|AD88|CO30|CO32|CO33|CO37|NO20|NO21|NO22|NO27|PV20|PV23)-(1|3|5|10|20|OP)$/;
-            if (!patternOld.test(id)) validationErrors.push("No cumple con el formato válido.");
+            if (!patternOld.test(id)) validationErrors.push("La licencia no tiene un formato válido.");
         }
 
         return validationErrors;
