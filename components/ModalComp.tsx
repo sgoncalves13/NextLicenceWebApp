@@ -14,6 +14,7 @@ interface ModalCompProps {
 
 export default function ModalComp({ licence_info, onClose, status, errors }: ModalCompProps) {
 
+    // Si hay errores, mostrarlos en el modal en forma del lista
     if (errors && errors.length > 0) {
         return (
             <motion.div initial={{ scale: 0, transform: "translateX(-200px)" }} animate={{ scale: 1, transform: "translateX(0px)" }} transition={{ type: "spring" }} className="fixed inset-0 flex justify-center items-center z-50 p-4" onClick={onClose}>
@@ -42,14 +43,14 @@ export default function ModalComp({ licence_info, onClose, status, errors }: Mod
         );
     }
 
-
+    // Ya aqui no hay errores, por lo que se llamo al API y se tiene una respuesta
     if (!licence_info) return null;
 
     const { error, ...fields } = licence_info;
 
     const fieldCount = Object.keys(fields).length;
 
-
+    // Si el status es 404, mostrar mensaje de licencia no en encontrada
     if (status === 404) {
         return (
             <motion.div initial={{ scale: 0, transform: "translateX(-200px)" }} animate={{ scale: 1, transform: "translateX(0px)" }} transition={{ type: "spring" }} className="fixed inset-0 flex justify-center items-center z-50 p-4" onClick={onClose}>
@@ -74,6 +75,7 @@ export default function ModalComp({ licence_info, onClose, status, errors }: Mod
         );
     }
 
+    // Si el status es otro diferente de 200, mostrar mensaje de error generico
     else if (status && status !== 200) {
         return (
             <motion.div initial={{ scale: 0, transform: "translateX(-200px)" }} animate={{ scale: 1, transform: "translateX(0px)" }} transition={{ type: "spring" }} className="fixed inset-0 flex justify-center items-center z-50 p-4" onClick={onClose}>
@@ -98,6 +100,7 @@ export default function ModalComp({ licence_info, onClose, status, errors }: Mod
         );
     }
 
+    // Si el status es 200, mostrar la informacion de la licencia
     return (
         <motion.div initial={{ scale: 0, transform: "translateX(-200px)" }} animate={{ scale: 1, transform: "translateX(0px)" }} transition={{ type: "spring" }} className="fixed inset-0 flex justify-center items-center z-50 p-4" onClick={onClose}>
             <div
