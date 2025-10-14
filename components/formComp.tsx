@@ -9,7 +9,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 type DynamicInputProps = {
     licenceId: string;
     setLicenceId: (val: string) => void;
-    errors: string[];
     loading: boolean;
 };
 
@@ -18,7 +17,7 @@ function BaseInput({
     isCenter,
     length,
     onChange,
-    isLoadingOld
+    isLoadingOld,
 }: {
     className?: string;
     isCenter?: boolean;
@@ -120,7 +119,7 @@ function InputOld({ setLicenceIdOld, isLoadingOld }: InputOldProps) {
 
 
 
-function InputNew({ licenceId, setLicenceId, errors, loading }: DynamicInputProps) {
+function InputNew({ licenceId, setLicenceId, loading }: DynamicInputProps) {
 
     return (
         <Input
@@ -131,20 +130,11 @@ function InputNew({ licenceId, setLicenceId, errors, loading }: DynamicInputProp
             type="text"
             isClearable
             maxLength={12}
-            minLength={12}
-            isInvalid={errors.length > 0}
             isDisabled={loading}
             onChange={(e) => setLicenceId(e.target.value.toUpperCase())}
             onClear={() => setLicenceId("")}
             size="md"
             value={licenceId}
-            errorMessage={() => (
-                <ul>
-                    {errors.map((error, i) => (
-                        <li key={i}>{error}</li>
-                    ))}
-                </ul>
-            )}
             classNames={{
                 inputWrapper: [
                     "shadow-sm",
@@ -165,21 +155,20 @@ function InputNew({ licenceId, setLicenceId, errors, loading }: DynamicInputProp
 
 type LicenceButtonProps = {
     loading: boolean;
-    errors: string[];
     captchaCompleted: boolean;
     onSubmit: () => void;
     text: string;
     otherLoading?: boolean
 };
 
-function LicenceButton({ loading, errors, captchaCompleted, onSubmit, text, otherLoading }: LicenceButtonProps) {
+function LicenceButton({ loading, captchaCompleted, onSubmit, text, otherLoading }: LicenceButtonProps) {
     return (
         <Button
             color="primary"
             variant="shadow"
             isLoading={loading}
             size="lg"
-            isDisabled={errors.length > 0 || !captchaCompleted || otherLoading}
+            isDisabled={!captchaCompleted || otherLoading}
             onPress={onSubmit}
         >
             {text}
@@ -198,15 +187,25 @@ export default function Form() {
     const [loading, setLoading] = useState(false);
     const [loadingOld, setLoadingOld] = useState(false);
     const recaptchaRef = useRef<ReCAPTCHA>(null);
+    const [status, setStatus] = useState<number | null>(null);
+    const [errors, setErrors] = useState<string[]>([]);
 
-    const errors: string[] = [];
-    if (licenceId.length !== 12) errors.push("La longitud de la licencia debe ser de 12 caracteres");
-    if (!/^[A-F0-9]*$/.test(licenceId)) errors.push("Solo debe contener números y letras [A-F]");
 
-    const oldErrors: string[] = [];
-    const patternOld = /^(AAN|ACA|ACE|AED|AEX|ALL|AOC|AOR|CAN|CCA|CCB|CCE|CEX|CFL|CLL|COC|COR|CRD|IAN|ICA|ICE|IEX|ILL|IOC|IOR|RCA)[0-9]{4}-[A-Z0-9]{4}-[1345]-(AD70|AD75|AD80|AD88|CO30|CO32|CO33|CO37|NO20|NO21|NO22|NO27|PV20|PV23)-(1|3|5|10|20|OP)$/;
 
-    if (!patternOld.test(licenceIdOld)) oldErrors.push("No cumple con el formato valido");
+    const validateFormat = (id: string, isNew: boolean) => {
+        const validationErrors: string[] = [];
+
+        if (isNew) {
+            if (id.length !== 12) validationErrors.push("La longitud de la licencia debe ser de 12 caracteres.");
+            if (!/^[A-F0-9]*$/.test(id)) validationErrors.push("Solo debe contener números y letras [A-F].");
+        } else {
+            const patternOld = /^(AAN|ACA|ACE|AED|AEX|ALL|AOC|AOR|CAN|CCA|CCB|CCE|CEX|CFL|CLL|COC|COR|CRD|IAN|ICA|ICE|IEX|ILL|IOC|IOR|RCA)[0-9]{4}-[A-Z0-9]{4}-[1345]-(AD70|AD75|AD80|AD88|CO30|CO32|CO33|CO37|NO20|NO21|NO22|NO27|PV20|PV23)-(1|3|5|10|20|OP)$/;
+            if (!patternOld.test(id)) validationErrors.push("No cumple con el formato válido.");
+        }
+
+        return validationErrors;
+    };
+
 
     const endpoint = `/api/getLicences?Id=${licenceId}`;
     const endpointOld = `/api/getLicencesOld?Id=${licenceIdOld}`;
@@ -215,6 +214,7 @@ export default function Form() {
         try {
             const response = await fetch(`${endpoint}&captchaToken=${captchaToken}`);
             const licence_info = await response.json();
+            setStatus(response.status);
             setLicenceInfo(licence_info);
         } catch (error: any) {
             setLicenceInfo({ error: error.message });
@@ -228,14 +228,27 @@ export default function Form() {
 
 
     const onSubmit = (endpoint: string, isNew: boolean) => {
-        const token = recaptchaRef.current?.getValue();
-        if (token) {
+        const id = isNew ? licenceId : licenceIdOld;
+        const formatErrors = validateFormat(id, isNew);
+
+        if (formatErrors.length > 0) {
+            setErrors(formatErrors);
+            setShowModalDetail(true);
+            return;
+        } else {
+            const token = recaptchaRef.current?.getValue();
+            if (!token) {
+                alert("Por favor completa el CAPTCHA antes de enviar el formulario.");
+                return;
+            }
+
+            setErrors([]);
             GetLicenceInfo(endpoint, token, isNew);
             isNew ? setLoading(true) : setLoadingOld(true);
-        } else {
-            alert("Por favor completa el CAPTCHA antes de enviar el formulario.");
         }
+
     };
+
 
 
 
@@ -253,34 +266,35 @@ export default function Form() {
                         <InputNew
                             licenceId={licenceId}
                             setLicenceId={setLicenceId}
-                            errors={errors}
+
                             loading={loading}
                         />
                         <LicenceButton
                             loading={loading}
-                            errors={errors}
+
                             captchaCompleted={captchaCompleted}
-                            onSubmit={() =>onSubmit(endpoint, true)}
+                            onSubmit={() => onSubmit(endpoint, true)}
                             text="Consultar"
                             otherLoading={loadingOld}
                         />
                     </div>
-                    <div className="w-full text-left">
-                        <label className="text-small">Licencia familia 2K8 y 2KDoce</label>
-                    </div>
-                    <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
-                        <InputOld
-                            setLicenceIdOld={setLicenceIdOld}
-                            isLoadingOld={loadingOld}
-                        />
-                        <LicenceButton
-                            loading={loadingOld}
-                            errors={oldErrors}
-                            captchaCompleted={captchaCompleted}
-                            onSubmit={() =>onSubmit(endpointOld, false)}
-                            text="Consultar"
-                            otherLoading={loading}
-                        />
+                    <div>
+                        <div className="w-full text-left pb-2">
+                            <label className="text-small">Licencia familia 2K8 y 2KDoce</label>
+                        </div>
+                        <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
+                            <InputOld
+                                setLicenceIdOld={setLicenceIdOld}
+                                isLoadingOld={loadingOld}
+                            />
+                            <LicenceButton
+                                loading={loadingOld}
+                                captchaCompleted={captchaCompleted}
+                                onSubmit={() => onSubmit(endpointOld, false)}
+                                text="Consultar"
+                                otherLoading={loading}
+                            />
+                        </div>
                     </div>
 
                     <ReCAPTCHA
@@ -298,7 +312,7 @@ export default function Form() {
                     )}
                 </div>
 
-                {showModalDetail && <ModalComp licence_info={licenceInfo} onClose={() => setShowModalDetail(false)} />}
+                {showModalDetail && <ModalComp licence_info={licenceInfo} onClose={() => setShowModalDetail(false)} status={status} errors={errors} />}
             </motion.div>
         </div>
     );
