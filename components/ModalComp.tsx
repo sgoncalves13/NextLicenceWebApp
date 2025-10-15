@@ -115,7 +115,7 @@ export default function ModalComp({ licence_info, onClose, status, errors }: Mod
                     <>
                         <h1 className="text-2xl font-bold mb-4 text-white">Licencia válida:</h1>
                         <p className="mb-2 text-white"><strong>Licencia:</strong> {licence_info.Id}</p>
-                        <p className="mb-2 text-white">{licence_info.DescArticulo}</p>
+                        <p className="mb-2 text-white">{licence_info.DescProducto}</p>
                         <p className="mb-2 text-white"><strong>Cliente:</strong> {licence_info.DescCliente}</p>
                     </>
                 )}
