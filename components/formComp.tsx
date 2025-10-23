@@ -61,7 +61,7 @@ export default function Form() {
         }
   };
 
-    if(licenceId.length !== 12) errors.push("La longitud de la licencia debe ser de 12");
+    if(licenceId.length !== 12) errors.push("La longitud de la licencia debe ser de 12 caracteres");
 
     if(licenceId.match(/^[A-F0-9]*$/) ? false : true) errors.push("Solo debe contener números y letras [A-F]")
 
