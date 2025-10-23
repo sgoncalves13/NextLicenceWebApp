@@ -112,7 +112,7 @@ export default function Form() {
             />
             {!captchaCompleted && (
             <p className="text-red-600 text-sm font-semibold text-center">
-                Debes completar el CAPTCHA antes de consultar.
+                Debes completar el <strong>CAPTCHA</strong> antes de consultar.
             </p>)}
             <Button color="primary" type="submit" variant="shadow" isLoading = {loading} size="lg" isDisabled ={errors.length > 0 || !captchaCompleted}>
                 Consultar
