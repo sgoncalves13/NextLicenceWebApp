@@ -100,6 +100,9 @@ export default function Form() {
                     "group-data-[focus=true]:bg-default-200/50",
                     "dark:group-data-[focus=true]:bg-default/60",
                     "cursor-text!",
+                ],
+                    input: [
+                    "focus:outline-none",
                 ]
                 }}
             />
