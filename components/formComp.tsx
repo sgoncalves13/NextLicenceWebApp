@@ -5,6 +5,8 @@ import { Button, Input } from "@heroui/react";
 import { motion } from "motion/react";
 import ModalComp from "./ModalComp";
 import ReCAPTCHA from "react-google-recaptcha";
+import ProfitLogo from "../public/LogoPPWhite.webp";
+import Image from 'next/image';
 
 type DynamicInputProps = {
     licenceId: string;
@@ -28,7 +30,7 @@ function BaseInput({
     return (
         <Input
             variant="faded"
-            size="md"
+            size="lg"
             maxLength={length}
             type="text"
             onChange={onChange}
@@ -123,8 +125,6 @@ function InputNew({ licenceId, setLicenceId, loading }: DynamicInputProps) {
 
     return (
         <Input
-            label="Licencia familia 9"
-            labelPlacement="outside-top"
             variant="faded"
             name="licencia"
             type="text"
@@ -133,7 +133,7 @@ function InputNew({ licenceId, setLicenceId, loading }: DynamicInputProps) {
             isDisabled={loading}
             onChange={(e) => setLicenceId(e.target.value.toUpperCase())}
             onClear={() => setLicenceId("")}
-            size="md"
+            size="lg"
             value={licenceId}
             classNames={{
                 inputWrapper: [
@@ -253,20 +253,24 @@ export default function Form() {
 
 
     return (
-        <div className="w-8/10 h-8/10 md:w-7/12 md:h-7/10">
+        <div className="w-8/10 h-9/11 md:w-7/12 md:h-7/10">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -40 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="bg-white/45 rounded-4xl shadow-xl/30 backdrop-filter backdrop-blur-md bg-opacity-10 w-full h-full flex flex-col gap-1 md:gap-10 items-center justify-center p-[5%]"
-            >
-                <div className="w-full max-w-[100%] md:max-w-[85%] flex items-center justify-center flex-col gap-5">
-                    <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
+                className="bg-white/45 rounded-4xl shadow-xl/30 backdrop-filter backdrop-blur-md bg-opacity-10 w-full h-full flex flex-col items-center justify-center p-[5%]">
+                <div className="w-full max-w-[100%] md:max-w-[85%] flex items-center justify-center flex-col gap-6">
+                    <Image src={ProfitLogo} alt="Profit Logo" className="h-8/12 w-7/12 md:w-5/12 md:h-full" draggable={false}/>
+                    <div className="w-full flex flex-col">
+                        <div className="w-full text-left pb-2 flex items-end gap-5">
+                            <label className="text-small">Licencia familia 9</label>
+                        </div>
+
+                        <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
                         <InputNew
                             licenceId={licenceId}
                             setLicenceId={setLicenceId}
-
                             loading={loading}
                         />
                         <LicenceButton
@@ -278,6 +282,8 @@ export default function Form() {
                             otherLoading={loadingOld}
                         />
                     </div>
+                    </div>
+
                     <div>
                         <div className="w-full text-left pb-2">
                             <label className="text-small">Licencia familia 2K8 y 2KDoce</label>
@@ -302,13 +308,13 @@ export default function Form() {
                         onChange={() => setCaptchacompleted(true)}
                         onExpired={() => setCaptchacompleted(false)}
                         ref={recaptchaRef}
-                        size="compact"
+                        size="normal"
                     />
 
                     {!captchaCompleted && (
-                        <p className="text-red-600 text-sm font-semibold text-center">
+                        <label className="text-red-600 text-sm font-semibold text-center">
                             Debes completar el CAPTCHA antes de consultar.
-                        </p>
+                        </label>
                     )}
                 </div>
 
