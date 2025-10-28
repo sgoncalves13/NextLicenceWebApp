@@ -5,7 +5,7 @@ import { Button, Input } from "@heroui/react";
 import { motion } from "motion/react";
 import ModalComp from "./ModalComp";
 import ReCAPTCHA from "react-google-recaptcha";
-import ProfitLogo from "../public/LogoPPWhite.webp";
+import ProfitLogo from "../public/Profit-black.webp";
 import Logo2K8 from '../public/Familia2K8.webp';
 import Logo2kDoce from '../public/Familia2KDoce.webp'
 import Image from 'next/image';
