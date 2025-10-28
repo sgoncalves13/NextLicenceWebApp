@@ -287,7 +287,7 @@ export default function Form() {
                     </div>
 
                     <div>
-                        <div className="w-full text-left pb-2 flex gap-5 items-end">
+                        <div className="w-full text-left pb-2 flex gap-[3%] items-end">
                             <label className="text-small">Licencia familia 2KDoce y 2K8</label>
                             <Image src={Logo2kDoce} alt="Profit2K12" className="h-2/14 w-2/14" draggable={false}/>
                             <Image src={Logo2K8} alt="Profit2K8" className="h-1/15 w-1/15" draggable={false}/>
