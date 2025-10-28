@@ -6,6 +6,8 @@ import { motion } from "motion/react";
 import ModalComp from "./ModalComp";
 import ReCAPTCHA from "react-google-recaptcha";
 import ProfitLogo from "../public/LogoPPWhite.webp";
+import Logo2K8 from '../public/Familia2K8.webp';
+import Logo2kDoce from '../public/Familia2KDoce.webp'
 import Image from 'next/image';
 
 type DynamicInputProps = {
@@ -253,7 +255,7 @@ export default function Form() {
 
 
     return (
-        <div className="w-8/10 h-9/11 md:w-7/12 md:h-7/10">
+        <div className="w-8/10 h-9/11 md:w-7/12 md:h-8/10">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -264,7 +266,7 @@ export default function Form() {
                     <Image src={ProfitLogo} alt="Profit Logo" className="h-8/12 w-7/12 md:w-5/12 md:h-full" draggable={false}/>
                     <div className="w-full flex flex-col">
                         <div className="w-full text-left pb-2 flex items-end gap-5">
-                            <label className="text-small">Licencia familia 9</label>
+                            <label className="text-medium">Licencia familia 9</label>
                         </div>
 
                         <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
@@ -285,8 +287,10 @@ export default function Form() {
                     </div>
 
                     <div>
-                        <div className="w-full text-left pb-2">
-                            <label className="text-small">Licencia familia 2K8 y 2KDoce</label>
+                        <div className="w-full text-left pb-2 flex gap-5 items-end">
+                            <label className="text-small">Licencia familia 2KDoce y 2K8</label>
+                            <Image src={Logo2kDoce} alt="Profit2K12" className="h-2/14 w-2/14" draggable={false}/>
+                            <Image src={Logo2K8} alt="Profit2K8" className="h-1/15 w-1/15" draggable={false}/>
                         </div>
                         <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
                             <InputOld
@@ -302,14 +306,16 @@ export default function Form() {
                             />
                         </div>
                     </div>
-
-                    <ReCAPTCHA
+                    <div className="scale-[0.9]">
+                        <ReCAPTCHA
                         sitekey="6LfTG2grAAAAAPdyw1vlBJGfZSyv_j_mMTKfogHc"
                         onChange={() => setCaptchacompleted(true)}
                         onExpired={() => setCaptchacompleted(false)}
                         ref={recaptchaRef}
                         size="normal"
-                    />
+                        />
+                    </div>
+
 
                     {!captchaCompleted && (
                         <label className="text-red-600 text-sm font-semibold text-center">
