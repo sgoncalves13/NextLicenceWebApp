@@ -319,7 +319,7 @@ export default function Form() {
 
                     {!captchaCompleted && (
                         <label className="text-red-600 text-sm font-semibold text-center">
-                            Debes completar el CAPTCHA antes de consultar
+                            Debes completar el CAPTCHA antes de consultar.
                         </label>
                     )}
                 </div>
