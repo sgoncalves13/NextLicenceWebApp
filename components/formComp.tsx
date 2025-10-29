@@ -82,10 +82,10 @@ function InputOld({ setLicenceIdOld, isLoadingOld }: InputOldProps) {
             <div className="flex flex-col xl:flex-row gap-4 xl:gap-2 items-center justify-center w-full">
                 <div className="flex gap-2 items-center justify-center w-full xl:w-[50%]">
                     <BaseInput
-                    className="w-[65%]"
-                    length={7}
-                    isLoadingOld={isLoadingOld}
-                    onChange={(e) => handlePartChange(0, e.target.value)}
+                        className="w-[65%]"
+                        length={7}
+                        isLoadingOld={isLoadingOld}
+                        onChange={(e) => handlePartChange(0, e.target.value)}
                     />
                     -
                     <BaseInput
@@ -267,34 +267,34 @@ export default function Form() {
                 transition={{ duration: 0.4, ease: "easeOut" }}
                 className="bg-white/45 rounded-4xl shadow-xl/30 backdrop-filter backdrop-blur-md bg-opacity-10 w-full h-full flex flex-col items-center justify-center p-[5%]">
                 <div className="w-full max-w-[100%] md:max-w-[85%] flex items-center justify-center flex-col gap-6">
-                    <Image src={ProfitLogo} alt="Profit Logo" className="h-8/12 w-7/12 md:w-5/12 md:h-full" draggable={false}/>
+                    <Image src={ProfitLogo} alt="Profit Logo" className="h-8/12 w-7/12 md:w-5/12 md:h-full" draggable={false} />
                     <div className="w-full flex flex-col">
                         <div className="w-full text-left pb-2 flex items-end gap-5">
                             <label className="text-medium">Licencia familia 9</label>
                         </div>
 
                         <div className="w-full flex flex-col md:flex-row gap-3 justify-center items-center">
-                        <InputNew
-                            licenceId={licenceId}
-                            setLicenceId={setLicenceId}
-                            loading={loading}
-                        />
-                        <LicenceButton
-                            loading={loading}
+                            <InputNew
+                                licenceId={licenceId}
+                                setLicenceId={setLicenceId}
+                                loading={loading}
+                            />
+                            <LicenceButton
+                                loading={loading}
 
-                            captchaCompleted={captchaCompleted}
-                            onSubmit={() => onSubmit(endpoint, true)}
-                            text="Consultar"
-                            otherLoading={loadingOld}
-                        />
-                    </div>
+                                captchaCompleted={captchaCompleted}
+                                onSubmit={() => onSubmit(endpoint, true)}
+                                text="Consultar"
+                                otherLoading={loadingOld}
+                            />
+                        </div>
                     </div>
 
                     <div>
                         <div className="w-full text-left pb-2 flex gap-[3%] items-end">
                             <label className="text-small">Licencia familia 2KDoce y 2K8</label>
-                            <Image src={Logo2kDoce} alt="Profit2K12" className="h-2/14 w-2/14" draggable={false}/>
-                            <Image src={Logo2K8} alt="Profit2K8" className="h-1/15 w-1/15" draggable={false}/>
+                            <Image src={Logo2kDoce} alt="Profit2K12" className="h-2/14 w-2/14" draggable={false} />
+                            <Image src={Logo2K8} alt="Profit2K8" className="h-1/15 w-1/15" draggable={false} />
                         </div>
                         <div className="w-full flex flex-col md:flex-row gap-3 justify-center items-center">
                             <InputOld
@@ -312,11 +312,11 @@ export default function Form() {
                     </div>
                     <div className="scale-[0.9]">
                         <ReCAPTCHA
-                        sitekey="6LfTG2grAAAAAPdyw1vlBJGfZSyv_j_mMTKfogHc"
-                        onChange={() => setCaptchacompleted(true)}
-                        onExpired={() => setCaptchacompleted(false)}
-                        ref={recaptchaRef}
-                        size="normal"
+                            sitekey="6LfTG2grAAAAAPdyw1vlBJGfZSyv_j_mMTKfogHc"
+                            onChange={() => setCaptchacompleted(true)}
+                            onExpired={() => setCaptchacompleted(false)}
+                            ref={recaptchaRef}
+                            size="normal"
                         />
                     </div>
 

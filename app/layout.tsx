@@ -7,7 +7,6 @@ import { fontMono, fontRethink, fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import Header from "@/components/header";
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +34,6 @@ export default function RootLayout({
           fontRethink.variable
         )}>
         <Providers themeProps={{ attribute: "class"}}>
-            {/* <Header /> */}
             <main className="h-full">
               {children}
             </main>
