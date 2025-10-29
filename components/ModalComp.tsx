@@ -1,4 +1,3 @@
-import { Console } from "console";
 import { motion } from "motion/react"
 
 interface LicenceInfoType {
