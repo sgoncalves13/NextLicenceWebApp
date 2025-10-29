@@ -1,5 +1,7 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
+import clsx from "clsx";
+import { fontMono, fontRethink, fontSans } from "@/config/fonts";
 
 
 import { Providers } from "./providers";
@@ -26,10 +28,15 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head />
-      <body className="h-screen bg-linear-115 from-[#00a0df] to-[#003592]">
+      <body className={clsx(
+          "h-screen bg-custom-radial font-rethink",
+          fontSans.variable,
+          fontMono.variable,
+          fontRethink.variable
+        )}>
         <Providers themeProps={{ attribute: "class"}}>
-            <Header />
-            <main className="h-10/12">
+            {/* <Header /> */}
+            <main className="h-full">
               {children}
             </main>
         </Providers>

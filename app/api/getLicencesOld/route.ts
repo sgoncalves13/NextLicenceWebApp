@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const fullApiUrl = `${PRIVATE_API_URL}getLicences?Id=${licenceId}`;
+    const fullApiUrl = `${PRIVATE_API_URL}getLicencesOld?Id=${licenceId}`;
 
     const apiResponse = await fetch(fullApiUrl, {
       method: 'GET',

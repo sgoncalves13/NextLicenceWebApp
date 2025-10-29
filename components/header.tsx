@@ -1,4 +1,4 @@
-import ProfitLogo from "../public/Profit-black.webp";
+import ProfitLogo from "../public/LogoPPWhite.webp";
 import Image from 'next/image';
 
 export default function Header() {
