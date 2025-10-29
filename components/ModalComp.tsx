@@ -1,3 +1,4 @@
+import { Console } from "console";
 import { motion } from "motion/react"
 
 interface LicenceInfoType {
@@ -96,6 +97,8 @@ export default function ModalComp({ licence_info, onClose, status, errors }: Mod
         );
     }
 
+    let licence_description = licence_info.DescProducto.split(', ');
+
     // Si el status es 200, mostrar la informacion de la licencia
     return (
         <motion.div initial={{ y: "5%", opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: "-5%", opacity: 0 }} transition={{ duration: 0.4 }} className="fixed inset-0 flex justify-center items-center z-50 p-4" onClick={onClose}>
@@ -108,7 +111,9 @@ export default function ModalComp({ licence_info, onClose, status, errors }: Mod
                         <h1 className="text-2xl font-bold mb-4 text-white">Licencia válida:</h1>
                         <p className="mb-2 text-white"><strong>Licencia:</strong> {licence_info.Id}</p>
                         <p className="mb-2 text-white"><strong>Cliente:</strong> {licence_info.DescCliente}</p>
-                        <p className="mb-2 text-white">{licence_info.DescProducto}</p>
+                        {licence_description.map((line: string, i: number) => (
+                            <p key={i} className="text-white mb-1">{line}</p>
+                        ))}
                         <p className="mb-4 text-white"><strong>Estado:</strong> {licence_info.DescEstado}</p>
                     </>
                 ) : (
