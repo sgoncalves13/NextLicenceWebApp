@@ -79,43 +79,47 @@ function InputOld({ setLicenceIdOld, isLoadingOld }: InputOldProps) {
 
     return (
         <div className="w-full items-center">
-            <div className="flex gap-3 items-center justify-center w-full">
-                <BaseInput
+            <div className="flex flex-col xl:flex-row gap-4 xl:gap-2 items-center justify-center w-full">
+                <div className="flex gap-2 items-center justify-center w-full xl:w-[50%]">
+                    <BaseInput
                     className="w-[65%]"
                     length={7}
                     isLoadingOld={isLoadingOld}
                     onChange={(e) => handlePartChange(0, e.target.value)}
-                />
-                -
-                <BaseInput
-                    className="w-[50%]"
-                    length={4}
-                    isLoadingOld={isLoadingOld}
-                    onChange={(e) => handlePartChange(1, e.target.value)}
-                />
-                -
-                <BaseInput
-                    className="w-[30%]"
-                    length={1}
-                    isCenter
-                    isLoadingOld={isLoadingOld}
-                    onChange={(e) => handlePartChange(2, e.target.value)}
-                />
-                -
-                <BaseInput
-                    className="w-[50%]"
-                    length={4}
-                    isLoadingOld={isLoadingOld}
-                    onChange={(e) => handlePartChange(3, e.target.value)}
-                />
-                -
-                <BaseInput
-                    className="w-[40%]"
-                    length={2}
-                    isCenter
-                    isLoadingOld={isLoadingOld}
-                    onChange={(e) => handlePartChange(4, e.target.value)}
-                />
+                    />
+                    -
+                    <BaseInput
+                        className="w-[50%]"
+                        length={4}
+                        isLoadingOld={isLoadingOld}
+                        onChange={(e) => handlePartChange(1, e.target.value)}
+                    />
+                    -
+                </div>
+                <div className="flex gap-2 items-center justify-center w-full xl:w-[50%]">
+                    <BaseInput
+                        className="w-[30%]"
+                        length={1}
+                        isCenter
+                        isLoadingOld={isLoadingOld}
+                        onChange={(e) => handlePartChange(2, e.target.value)}
+                    />
+                    -
+                    <BaseInput
+                        className="w-[50%]"
+                        length={4}
+                        isLoadingOld={isLoadingOld}
+                        onChange={(e) => handlePartChange(3, e.target.value)}
+                    />
+                    -
+                    <BaseInput
+                        className="w-[40%]"
+                        length={2}
+                        isCenter
+                        isLoadingOld={isLoadingOld}
+                        onChange={(e) => handlePartChange(4, e.target.value)}
+                    />
+                </div>
             </div>
         </div>
     );
@@ -255,7 +259,7 @@ export default function Form() {
 
 
     return (
-        <div className="w-8/10 h-9/11 md:w-7/12 md:h-8/10">
+        <div className="w-8/10 h-10/11 md:w-7/12 md:h-8/10">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -269,7 +273,7 @@ export default function Form() {
                             <label className="text-medium">Licencia familia 9</label>
                         </div>
 
-                        <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
+                        <div className="w-full flex flex-col md:flex-row gap-3 justify-center items-center">
                         <InputNew
                             licenceId={licenceId}
                             setLicenceId={setLicenceId}
@@ -292,7 +296,7 @@ export default function Form() {
                             <Image src={Logo2kDoce} alt="Profit2K12" className="h-2/14 w-2/14" draggable={false}/>
                             <Image src={Logo2K8} alt="Profit2K8" className="h-1/15 w-1/15" draggable={false}/>
                         </div>
-                        <div className="w-full flex flex-col lg:flex-row gap-3 justify-center items-center">
+                        <div className="w-full flex flex-col md:flex-row gap-3 justify-center items-center">
                             <InputOld
                                 setLicenceIdOld={setLicenceIdOld}
                                 isLoadingOld={loadingOld}

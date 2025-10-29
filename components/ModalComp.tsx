@@ -96,7 +96,42 @@ export default function ModalComp({ licence_info, onClose, status, errors }: Mod
         );
     }
 
-    let licence_description = licence_info.DescProducto.split(', ');
+    const formatDescription = (desc: string) => {
+        let result = [];
+        let parts = desc.split(', ');
+        result.push(parts[0] + ", " + parts[1]);
+
+        const formatAAMM = (text: string) => {
+            const match = text.match(/(\d{4})(?!.*\d)/);
+            if (match) {
+                const aamm = match[1];
+                const formatted = aamm.slice(0, 2) + '/' + aamm.slice(2);
+                return text.replace(aamm, formatted);
+            }
+            return text;
+        };
+
+        if (parts[2] && parts[2].includes("AAMM")) {
+            parts[2] = parts[2].replace("Expira AAMM:", "Expira Año/Mes (AAMM):");
+            parts[2] = formatAAMM(parts[2]);
+            result.push(parts[2]);
+        } else if (parts[2]) {
+            result.push(parts[2]);
+        }
+
+        if (parts[3] && parts[3].includes("AAMM")) {
+            parts[3] = parts[3].replace("Expira AAMM:", "Expira Año/Mes (AAMM):");
+            parts[3] = formatAAMM(parts[3]);
+            result.push(parts[3]);
+        } else if (parts[3]) {
+            result.push(parts[3]);
+        }
+
+        return result;
+    };
+
+
+    let licence_description = formatDescription(licence_info.DescProducto);
 
     // Si el status es 200, mostrar la informacion de la licencia
     return (
