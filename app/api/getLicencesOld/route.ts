@@ -9,7 +9,8 @@ export async function GET(request: NextRequest) {
   try {
 
     const headersList = headers();
-    console.log(headersList);
+    console.log("###############################################3");
+    console.log((await headersList).get('x-forwarded-for'));
     const forwardedFor = (await headersList).get('x-forwarded-for');
     let clientIp = 'UNKNOWN';
 
